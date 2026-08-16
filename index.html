@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>God Astrologer — Created by Silentrootry</title>
+<meta name="description" content="God Astrologer — Free Kundli, Future Prediction, Astrology Chat & Remedies. Created by Silentrootry." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg1:#07071a; --bg2:#150f2e; --gold:#ffd257; --gold2:#ffb347;
+  --purple:#8b5cf6; --purple2:#6d28d9; --text:#f3ecff; --muted:#b8aede;
+  --card:rgba(255,255,255,.06); --border:rgba(255,255,255,.12);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins','Noto Sans Devanagari',sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2) 60%,#231042);color:var(--text);min-height:100vh;overflow-x:hidden}
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d) ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
+nav{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:16px 6%;background:rgba(10,7,26,.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px}
+.brand{display:flex;align-items:center;gap:10px;font-size:1.2rem;font-weight:800;letter-spacing:.5px}
+.brand .orb{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--gold),var(--purple));box-shadow:0 0 18px rgba(255,210,87,.6);flex-shrink:0}
+.brand small{display:block;font-size:.65rem;color:var(--muted);font-weight:500;letter-spacing:1px}
+.nav-links a{color:var(--muted);text-decoration:none;margin-left:22px;font-size:.95rem;transition:.3s}
+.nav-links a:hover{color:var(--gold)}
+.hero{position:relative;z-index:2;text-align:center;padding:70px 6% 30px}
+.hero h1{font-size:clamp(2rem,5vw,3.6rem);background:linear-gradient(90deg,var(--gold),#fff,var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800}
+.hero p{color:var(--muted);margin:14px auto 0;max-width:660px;font-size:1.05rem;line-height:1.7}
+.badge{display:inline-block;margin-top:18px;padding:7px 18px;border:1px solid var(--gold);border-radius:999px;color:var(--gold);font-size:.85rem;letter-spacing:1px;background:rgba(255,210,87,.08)}
+.hero-btns{margin-top:26px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.section{position:relative;z-index:2;max-width:1100px;margin:40px auto;padding:0 6%}
+.card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:30px;backdrop-filter:blur(10px);box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.sec-title{text-align:center;margin-bottom:26px}
+.sec-title h2{font-size:clamp(1.5rem,3vw,2.2rem)}
+.sec-title p{color:var(--muted);margin-top:8px}
+label{display:block;margin:14px 0 6px;color:var(--muted);font-size:.9rem;font-weight:600}
+input,select,textarea{width:100%;padding:13px 16px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.07);color:var(--text);font-family:inherit;font-size:1rem;outline:none;transition:.3s}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,210,87,.15)}
+input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+.btn{display:inline-block;cursor:pointer;border:none;font-family:inherit;font-size:1rem;font-weight:700;padding:14px 30px;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--gold2));color:#241500;transition:.3s;box-shadow:0 8px 24px rgba(255,178,71,.35)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(255,178,71,.5)}
+.btn.purple{background:linear-gradient(90deg,var(--purple),var(--purple2));color:#fff;box-shadow:0 8px 24px rgba(139,92,246,.4)}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--border);box-shadow:none}
+.center{text-align:center;margin-top:22px}
+.note{font-size:.8rem;color:var(--muted);margin-top:14px;text-align:center;line-height:1.6}
+#result{display:none;margin-top:26px;animation:fadeIn .6s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.result-head{text-align:center;margin-bottom:20px}
+.result-head h3{font-size:clamp(1.3rem,3vw,1.7rem)}
+.result-head .meta{color:var(--muted);margin-top:8px;font-size:.95rem}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.stat{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:16px;padding:16px;text-align:center}
+.stat .k{display:block;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.stat .v{display:block;font-size:1.1rem;font-weight:700;margin-top:6px;color:var(--gold)}
+.report-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:20px}
+.report{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:16px;padding:18px}
+.report h4{margin-bottom:8px;color:var(--gold);font-size:1rem}
+.report p{color:var(--text);font-size:.95rem;line-height:1.7}
+.remedy{margin-top:20px;background:linear-gradient(135deg,rgba(255,210,87,.12),rgba(139,92,246,.12));border:1px solid var(--gold);border-radius:16px;padding:20px}
+.remedy h4{color:var(--gold);margin-bottom:8px}
+.remedy ul{margin:10px 0 0 20px;line-height:2;font-size:.95rem}
+.chatbox{height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:16px;background:rgba(0,0,0,.25);border-radius:16px;margin-bottom:14px}
+.chatbox::-webkit-scrollbar{width:6px}
+.chatbox::-webkit-scrollbar-thumb{background:var(--purple);border-radius:99px}
+.msg{max-width:80%;padding:11px 15px;border-radius:16px;font-size:.95rem;line-height:1.6;white-space:pre-wrap}
+.msg.user{align-self:flex-end;background:linear-gradient(90deg,#7c3aed,#a855f7);border-bottom-right-radius:4px}
+.msg.bot{align-self:flex-start;background:rgba(255,255,255,.1);border-bottom-left-radius:4px}
+.msg.typing{font-style:italic;color:var(--muted)}
+.chat-row{display:flex;gap:10px}
+.chat-row input{flex:1}
+.chat-row .btn{padding:13px 22px;white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.chip{background:rgba(255,210,87,.1);border:1px solid rgba(255,210,87,.4);color:var(--gold);padding:7px 14px;border-radius:999px;cursor:pointer;font-size:.85rem;font-family:inherit;transition:.3s}
+.chip:hover{background:rgba(255,210,87,.25)}
+.donate-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.donate-box{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center}
+.amt-chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+.amt-chip{background:rgba(139,92,246,.15);border:1px solid var(--purple);color:var(--text);padding:8px 16px;border-radius:999px;cursor:pointer;font-family:inherit;font-weight:600;transition:.3s}
+.amt-chip:hover{background:rgba(139,92,246,.35)}
+.upi-id{display:inline-block;margin:10px 0;padding:6px 14px;background:rgba(255,210,87,.1);border:1px dashed var(--gold);border-radius:8px;color:var(--gold);font-weight:600;font-size:.9rem}
+#qrBox{margin-top:14px;display:none}
+#qrBox img{border-radius:12px;background:#fff;padding:8px}
+footer{position:relative;z-index:2;text-align:center;padding:40px 6%;border-top:1px solid var(--border);color:var(--muted);font-size:.92rem;line-height:2}
+footer strong{color:var(--gold)}
+@media(max-width:760px){
+  .form-grid{grid-template-columns:1fr}
+  .donate-grid{grid-template-columns:1fr}
+  .nav-links a{margin-left:12px;font-size:.85rem}
+  .card{padding:22px}
+}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+
+<nav>
+  <div class="brand">
+    <div class="orb"></div>
+    <div>🔮 God Astrologer<small>by Silentrootry</small></div>
+  </div>
+  <div class="nav-links">
+    <a href="#kundli">कुंडली</a>
+    <a href="#chat">चैट</a>
+    <a href="#donate">दान</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <span class="badge">✦ Free Kundli • Free Astrology Chat ✦</span>
+  <h1>God Astrologer</h1>
+  <p>अपना नाम और जन्म तिथि डालिए — जानिए आपका वर्तमान, भविष्य, और हर समस्या का आध्यात्मिक समाधान। 100% मुफ्त। 🙏</p>
+  <div class="hero-btns">
+    <a href="#kundli" class="btn">🔮 कुंडली बनाएं</a>
+    <a href="#chat" class="btn purple">💬 ज्योतिषी से चैट करें</a>
+  </div>
+</header>
+
+<!-- ================= कुंडली ================= -->
+<section class="section" id="kundli">
+  <div class="card">
+    <div class="sec-title">
+      <h2>🔮 अपनी कुंडली बनाएं</h2>
+      <p>नाम और जन्म तिथि डालें — पाएं आपका जीवन पथ अंक, राशि, आज का भविष्य और उपाय</p>
+    </div>
+    <form id="astroForm">
+      <div class="form-grid">
+        <div>
+          <label for="name">आपका नाम *</label>
+          <input type="text" id="name" placeholder="जैसे: Rahul Sharma" required />
+        </div>
+        <div>
+          <label for="dob">जन्म तिथि *</label>
+          <input type="date" id="dob" required />
+        </div>
+      </div>
+      <label for="gender">लिंग</label>
+      <select id="gender">
+        <option value="male">पुरुष</option>
+        <option value="female">महिला</option>
+        <option value="other">अन्य</option>
+      </select>
+      <div class="center">
+        <button type="submit" class="btn">🔮 मेरा भविष्य देखें</button>
+      </div>
+      <p class="note">⚠️ यह भविष्यवाणी मनोरंजन एवं आध्यात्मिक मार्गदर्शन के उद्देश्य से है।</p>
+    </form>
+
+    <div id="result"></div>
+  </div>
+</section>
+
+<!-- ================= चैट ================= -->
+<section class="section" id="chat">
+  <div class="card">
+    <div class="sec-title">
+      <h2>💬 आध्यात्मिक सहायक से पूछें</h2>
+      <p>प्रेम, करियर, धन, स्वास्थ्य, विवाह — कोई भी सवाल पूछिए, समाधान के साथ जवाब पाइए</p>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="chatbox" id="chatLog">
+      <div class="msg bot">नमस्ते! 🙏 मैं God Astrologer का आध्यात्मिक सहायक हूं। नीचे अपना सवाल लिखिए — प्रेम, करियर, धन, स्वास्थ्य, विवाह या भविष्य के बारे में।</div>
+    </div>
+    <form id="chatForm" class="chat-row">
+      <input type="text" id="chatInput" placeholder="अपना सवाल लिखें..." autocomplete="off" />
+      <button type="submit" class="btn purple">भेजें ➤</button>
+    </form>
+    <div class="center" style="margin-top:12px">
+      <button class="btn ghost" id="clearChat" style="padding:9px 20px;font-size:.85rem">🗑 चैट साफ़ करें</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= दान ================= -->
+<section class="section" id="donate">
+  <div class="card">
+    <div class="sec-title">
+      <h2>💰 स्वैच्छिक दान (Optional)</h2>
+      <p>God Astrologer की सभी सेवाएं 100% मुफ्त हैं। अगर आपको सेवा पसंद आई, तो अपनी श्रद्धा अनुसार दान कर सकते हैं। 🙏</p>
+    </div>
+    <div class="donate-grid">
+      <div class="donate-box">
+        <h3>💛 UPI से दान करें</h3>
+        <div class="amt-chips">
+          <button type="button" class="amt-chip" data-amt="51">₹51</button>
+          <button type="button" class="amt-chip" data-amt="101">₹101</button>
+          <button type="button" class="amt-chip" data-amt="251">₹251</button>
+          <button type="button" class="amt-chip" data-amt="501">₹501</button>
+          <button type="button" class="amt-chip" data-amt="1001">₹1001</button>
+        </div>
+        <label>राशि (₹)</label>
+        <input type="number" id="donateAmount" placeholder="जैसे: 101" min="1" />
+        <label>संदेश (वैकल्पिक)</label>
+        <input type="text" id="donateNote" placeholder="जैसे: God Astrologer के लिए शुभकामनाएं" />
+        <div class="upi-id" id="upiDisplay">UPI ID: yourname@upi</div>
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap">
+          <button type="button" class="btn" id="donateBtn">💛 UPI से दान करें</button>
+          <button type="button" class="btn ghost" id="copyBtn">📋 लिंक कॉपी करें</button>
+        </div>
+        <div id="qrBox"></div>
+      </div>
+      <div class="donate-box">
+        <h3>🪔 दान का महत्व</h3>
+        <p style="line-height:1.9;color:var(--muted);margin-top:10px">
+          ज्योतिष शास्त्र के अनुसार दान करने से ग्रह दोष कम होते हैं और पुण्य की प्राप्ति होती है।<br /><br />
+          ✨ आपका दान इस सेवा को और लोगों तक पहुंचाने में मदद करेगा।<br /><br />
+          🙏 धन्यवाद — God Astrologer & Silentrootry
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>🔮 <strong>God Astrologer</strong> — वर्तमान, भविष्य और समाधान, सब एक जगह।</p>
+  <p>© 2026 <strong>God Astrologer &amp; Silentrootry</strong> — Created by <strong>Silentrootry</strong>. All Rights Reserved.</p>
+  <p>⚠️ यह वेबसाइट मनोरंजन एवं आध्यात्मिक मार्गदर्शन के उद्देश्य से है।</p>
+</footer>
+
+<script>
+/* ================= तारे (Stars) ================= */
+(function(){
+  const box=document.getElementById('stars');
+  for(let i=0;i<120;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    const sz=Math.random()*2.5+0.5;
+    s.style.width=sz+'px'; s.style.height=sz+'px';
+    s.style.left=Math.random()*100+'%';
+    s.style.top=Math.random()*100+'%';
+    s.style.setProperty('--d',(Math.random()*3+2)+'s');
+    s.style.animationDelay=(Math.random()*4)+'s';
+    box.appendChild(s);
+  }
+})();
+
+/* ================= कुंडली इंजन ================= */
+function lifePath(dob){
+  let s=dob.replace(/-/g,'').split('').reduce((a,b)=>a+Number(b),0);
+  while(s>9 && s!==11 && s!==22 && s!==33){
+    s=String(s).split('').reduce((a,b)=>a+Number(b),0);
+  }
+  return s;
+}
+function getZodiac(day,month){
+  const signs=[
+    {name:'मेष (Aries)',sm:3,sd:21,em:4,ed:19},
+    {name:'वृषभ (Taurus)',sm:4,sd:20,em:5,ed:20},
+    {name:'मिथुन (Gemini)',sm:5,sd:21,em:6,ed:20},
+    {name:'कर्क (Cancer)',sm:6,sd:21,em:7,ed:22},
+    {name:'सिंह (Leo)',sm:7,sd:23,em:8,ed:22},
+    {name:'कन्या (Virgo)',sm:8,sd:23,em:9,ed:22},
+    {name:'तुला (Libra)',sm:9,sd:23,em:10,ed:22},
+    {name:'वृश्चिक (Scorpio)',sm:10,sd:23,em:11,ed:21},
+    {name:'धनु (Sagittarius)',sm:11,sd:22,em:12,ed:21},
+    {name:'मकर (Capricorn)',sm:12,sd:22,em:1,ed:19},
+    {name:'कुंभ (Aquarius)',sm:1,sd:20,em:2,ed:18},
+    {name:'मीन (Pisces)',sm:2,sd:19,em:3,ed:20}
+  ];
+  for(const s of signs){
+    if(s.sm<s.em){
+      if((month===s.sm&&day>=s.sd)||(month===s.em&&day<=s.ed)) return s.name;
+    }else{
+      if((month===s.sm&&day>=s.sd)||(month===s.em&&day<=s.ed)||(month===1&&day<=s.ed&&s.em===1)) return s.name;
+    }
+  }
+  return 'मीन (Pisces)';
+}
+function dayOfYear(d){
+  const start=new Date(d.getFullYear(),0,0);
+  return Math.floor((d-start)/86400000);
+}
+function pick(arr,seed){
+  const x=Math.abs(Math.sin(seed))*10000;
+  return arr[Math.floor((x-Math.floor(x))*arr.length)];
+}
+
+const lifePathData={
+ 1:{title:'सूर्य पथ — नेतृत्व',traits:'आत्मविश्वासी, महत्वाकांक्षी और जन्मजात नेता। आप दूसरों को राह दिखाने की क्षमता रखते हैं।',career:'नेता, प्रशासक, उद्यमी, राजनीति',gem:'माणिक्य (Ruby)',color:'लाल / सुनहरा',day:'रविवार',mantra:'ॐ सूर्याय नमः',donate:'रविवार को गेहूं या गुड़ का दान करें'},
+ 2:{title:'चंद्र पथ — संवेदनशील',traits:'भावुक, कूटनीतिज्ञ और मिलनसार। आप दूसरों की भावनाओं को गहराई से समझते हैं।',career:'कला, मनोविज्ञान, राजनय, परामर्श',gem:'मोती (Pearl)',color:'सफेद / चांदी',day:'सोमवार',mantra:'ॐ सोमाय नमः',donate:'सोमवार को दूध या चावल का दान करें'},
+ 3:{title:'गुरु पथ — संचार',traits:'रचनात्मक, हंसमुख और संवाद में निपुण। आपकी वाणी में जादू है।',career:'लेखन, मीडिया, कला, शिक्षा',gem:'पुखराज (Yellow Sapphire)',color:'पीला / केसरिया',day:'गुरुवार',mantra:'ॐ बृहस्पतये नमः',donate:'गुरुवार को केला, चना या हल्दी का दान करें'},
+ 4:{title:'राहु पथ — परिश्रमी',traits:'मेहनती, अनुशासित और व्यावहारिक। आप मजबूत नींव बनाने वाले इंसान हैं।',career:'इंजीनियरिंग, निर्माण, लेखा, तकनीक',gem:'नीलम (Blue Sapphire) — सावधानी से',color:'नीला / ग्रे',day:'शनिवार',mantra:'ॐ राहवे नमः',donate:'शनिवार को तेल या काली वस्तुओं का दान करें'},
+ 5:{title:'बुध पथ — बुद्धिमान',traits:'चतुर, अनुकूलनशील और व्यापार में कुशल। आप हर हालात में ढल जाते हैं।',career:'व्यापार, मार्केटिंग, पत्रकारिता, ट्रेडिंग',gem:'पन्ना (Emerald)',color:'हरा',day:'बुधवार',mantra:'ॐ बुधाय नमः',donate:'बुधवार को हरी सब्जियां या मूंग दाल का दान करें'},
+ 6:{title:'शुक्र पथ — आकर्षण',traits:'कलात्मक, सौंदर्य प्रेमी और परिवार प्रेमी। आपके व्यक्तित्व में आकर्षण है।',career:'कला, डिजाइन, फैशन, सेवा क्षेत्र',gem:'हीरा (Diamond) / ओपल',color:'सफेद / गुलाबी',day:'शुक्रवार',mantra:'ॐ शुक्राय नमः',donate:'शुक्रवार को सफेद मिठाई या दही का दान करें'},
+ 7:{title:'केतु पथ — आध्यात्मिक',traits:'गूढ़ ज्ञान, अंतर्दृष्टि और एकांतप्रिय। आप जीवन के गहरे रहस्य समझते हैं।',career:'रिसर्च, आध्यात्मिकता, ज्योतिष, लेखन',gem:"लेहसुनिया (Cat's Eye)",color:'भूरा / बैंगनी',day:'मंगलवार',mantra:'ॐ केतवे नमः',donate:'गाय को हरा चारा या अन्न का दान करें'},
+ 8:{title:'शनि पथ — न्यायप्रिय',traits:'अनुशासित, धैर्यवान और कर्मठ। आप न्याय और मेहनत में विश्वास रखते हैं।',career:'न्याय, प्रबंधन, खनन, रियल एस्टेट',gem:'नीलम (Blue Sapphire)',color:'नीला / काला',day:'शनिवार',mantra:'ॐ शनैश्चराय नमः',donate:'शनिवार को सरसों तेल या काली वस्तु का दान करें'},
+ 9:{title:'मंगल पथ — योद्धा',traits:'साहसी, ऊर्जावान और स्वतंत्र। आपमें आगे बढ़ने की जबरदस्त ताकत है।',career:'सेना, खेल, सर्जरी, इंजीनियरिंग',gem:'मूंगा (Red Coral)',color:'लाल',day:'मंगलवार',mantra:'ॐ अंगारकाय नमः',donate:'मंगलवार को मसूर दाल या गुड़ का दान करें'},
+ 11:{title:'मास्टर संख्या — दिव्य दूत',traits:'प्रेरणादायक, आध्यात्मिक और अंतर्ज्ञानी। आपका जीवन दूसरों को रोशनी देता है।',career:'आध्यात्मिक गुरु, कलाकार, प्रेरक वक्ता',gem:'मोती (Pearl)',color:'चांदी / सफेद',day:'सोमवार',mantra:'ॐ नमः शिवाय',donate:'सोमवार को दूध का दान करें'},
+ 22:{title:'मास्टर बिल्डर',traits:'महान निर्माता — आप सपने देखते हैं और उन्हें हकीकत में बदलते हैं।',career:'बड़े प्रोजेक्ट, वास्तुकला, उद्योग',gem:'पुखराज (Yellow Sapphire)',color:'सुनहरा',day:'गुरुवार',mantra:'ॐ गुरुभ्यो नमः',donate:'गुरुवार को केला और चने का दान करें'},
+ 33:{title:'मास्टर शिक्षक',traits:'सेवाभावी, करुणामय और मार्गदर्शक। आपका जन्म दूसरों की भलाई के लिए है।',career:'शिक्षा, सेवा, परोपकार',gem:'हीरा (Diamond)',color:'सफेद / गुलाबी',day:'शुक्रवार',mantra:'ॐ श्री महालक्ष्म्यै नमः',donate:'शुक्रवार को कन्या भोज या मिष्ठान का दान करें'}
+};
+
+const dailyPreds=[
+ 'आज का दिन शुभ संकेत लेकर आया है। किसी रुके हुए काम को आज पूरा करें — सफलता मिलेगी।',
+ 'ग्रहों की चाल से संकेत है कि आज आपकी मेहनत का फल मिल सकता है। धैर्य बनाए रखें।',
+ 'आज व्यस्तता बढ़ेगी, लेकिन हर काम समय पर पूरा होगा। बड़े निर्णय आज टाल दें।',
+ 'आज परिवार वालों के साथ समय बिताएं। रिश्तों में मिठास आएगी और मन को शांति मिलेगी।',
+ 'आज किसी पुराने मित्र या संपर्क से लाभ होने की संभावना है। अपने नेटवर्क का ध्यान रखें।',
+ 'आज अचानक धन लाभ या शुभ समाचार मिल सकता है। आर्थिक मामलों में सतर्कता भी जरूरी है।',
+ 'आज ऊर्जा का स्तर ऊंचा रहेगा। व्यायाम और योग के लिए समय निकालें — स्वास्थ्य लाभ होगा।',
+ 'आज वाणी पर संयम रखें। किसी बहस से बचें — चुप रहना ही सबसे अच्छा उपाय रहेगा।'
+];
+const futurePreds=[
+ 'अगले तीन महीने आपके जीवन में सकारात्मक बदलाव लाएंगे। करियर और रिश्तों दोनों में उन्नति के योग हैं।',
+ 'आने वाला समय मेहनत और लगन का है। जो बीज आज बोएंगे, उसका फल जल्द ही मीठा मिलेगा।',
+ 'अगले कुछ महीनों में कोई बड़ा अवसर दरवाजा खटखटाएगा। उसे पहचानने के लिए मन को शांत रखें।',
+ 'इस समय स्वास्थ्य पर विशेष ध्यान दें। नियमित दिनचर्या और संतुलित भोजन से बड़ी बीमारियों से बचाव होगा।',
+ 'आने वाले समय में परिवार में कोई शुभ कार्य संभव है। खर्चों पर नियंत्रण रखें।',
+ 'तीन महीने के अंदर आपकी आर्थिक स्थिति में सुधार के प्रबल योग हैं। निवेश सोच-समझकर करें।'
+];
+const careerPreds=[
+ 'करियर में उन्नति के योग हैं। वरिष्ठों से अच्छे संबंध बनाए रखें — प्रमोशन की संभावना प्रबल है।',
+ 'नौकरी बदलने या नया व्यवसाय शुरू करने के लिए समय अनुकूल है। अपनी योग्यता पर भरोसा करें।',
+ 'कार्यक्षेत्र में प्रतिस्पर्धा रहेगी, लेकिन आपकी मेहनत आपको आगे ले जाएगी। किसी काम को टालें नहीं।',
+ 'टीम वर्क से लाभ मिलेगा। अकेले नहीं, मिलकर काम करने पर सफलता तेजी से मिलेगी।'
+];
+const lovePreds=[
+ 'प्रेम जीवन में मिठास बढ़ेगी। अपने साथी के साथ समय बिताएं — रिश्ता और मजबूत होगा।',
+ 'रिश्ते में अनबन है तो जल्द ही समझौता होगा। खुलकर बात करें, गलतफहमी दूर होगी।',
+ 'नए रिश्ते की शुरुआत के योग हैं। सामाजिक मेलजोल बढ़ाएं — सही व्यक्ति से मुलाकात हो सकती है।',
+ 'प्रेम में संयम और विश्वास जरूरी है। जल्दबाजी में लिया गया निर्णय नुकसान दे सकता है।'
+];
+const moneyPreds=[
+ 'धन लाभ के योग हैं। लेकिन फिजूलखर्ची से बचें — बचत पर ध्यान दें।',
+ 'निवेश के लिए अच्छा समय है। जोखिम भरे निवेश से बचें, सुरक्षित विकल्प चुनें।',
+ 'अचानक धन आगमन की संभावना है। पुराना उधार वापस मिल सकता है।',
+ 'आय के नए स्रोत खुलेंगे। नई स्किल्स और नए काम पर ध्यान दें।'
+];
+const healthPreds=[
+ 'स्वास्थ्य सामान्य रहेगा। पेट से जुड़ी समस्याओं से बचने के लिए हल्का भोजन करें।',
+ 'मानसिक तनाव से बचें। ध्यान और प्राणायाम आपको ऊर्जा देंगे।',
+ 'मौसमी बीमारियों से सावधान रहें। गर्म पानी और हर्बल चाय का सेवन करें।',
+ 'शरीर में ऊर्जा बनी रहेगी। नियमित व्यायाम से सेहत में निखार आएगा।'
+];
+
+const astroForm=document.getElementById('astroForm');
+const resultBox=document.getElementById('result');
+astroForm.addEventListener('submit',function(e){
+  e.preventDefault();
+  const name=document.getElementById('name').value.trim();
+  const dob=document.getElementById('dob').value;
+  const gender=document.getElementById('gender').value;
+  if(!name||!dob){alert('कृपया अपना नाम और जन्म तिथि दर्ज करें');return;}
+  const parts=dob.split('-').map(Number); // [y,m,d]
+  const life=lifePath(dob);
+  const zodiac=getZodiac(parts[2],parts[1]);
+  const data=lifePathData[life]||lifePathData[1];
+  const gText=gender==='male'?'पुरुष':gender==='female'?'महिला':'अन्य';
+  const today=new Date();
+  const seed=life*100000+dayOfYear(today)*7+today.getFullYear();
+  const daily=pick(dailyPreds,seed);
+  const future=pick(futurePreds,seed+131);
+  const career=pick(careerPreds,seed+1);
+  const love=pick(lovePreds,seed+2);
+  const money=pick(moneyPreds,seed+3);
+  const health=pick(healthPreds,seed+4);
+  resultBox.innerHTML=`
+    <div class="result-head">
+      <h3>🔮 ${name} जी, आपकी कुंडली तैयार है</h3>
+      <p class="meta">जन्म तिथि: ${dob} • लिंग: ${gText} • राशि: ${zodiac}</p>
+    </div>
+    <div class="result-grid">
+      <div class="stat"><span class="k">जीवन पथ अंक</span><span class="v">${life}</span></div>
+      <div class="stat"><span class="k">पथ का नाम</span><span class="v">${data.title}</span></div>
+      <div class="stat"><span class="k">राशि</span><span class="v">${zodiac}</span></div>
+      <div class="stat"><span class="k">भाग्यशाली दिन</span><span class="v">${data.day}</span></div>
+      <div class="stat"><span class="k">भाग्यशाली रंग</span><span class="v">${data.color}</span></div>
+      <div class="stat"><span class="k">शुभ रत्न</span><span class="v">${data.gem}</span></div>
+    </div>
+    <div class="report" style="margin-top:20px">
+      <h4>🧘 आपका स्वभाव</h4>
+      <p>${data.traits} आपके लिए उपयुक्त करियर क्षेत्र: ${data.career}।</p>
+    </div>
+    <div class="report-grid">
+      <div class="report"><h4>🌈 आज का भविष्य</h4><p>${daily}</p></div>
+      <div class="report"><h4>🚀 करियर</h4><p>${career}</p></div>
+      <div class="report"><h4>💕 प्रेम</h4><p>${love}</p></div>
+      <div class="report"><h4>💰 धन</h4><p>${money}</p></div>
+      <div class="report"><h4>💪 स्वास्थ्य</h4><p>${health}</p></div>
+      <div class="report"><h4>🔮 आने वाला समय</h4><p>${future}</p></div>
+    </div>
+    <div class="remedy">
+      <h4>🪔 आपके उपाय (Remedies)</h4>
+      <ul>
+        <li>मंत्र: <b>${data.mantra}</b> — प्रतिदिन 108 बार जप करें</li>
+        <li>रत्न: <b>${data.gem}</b> — योग्य ज्योतिषी की सलाह से धारण करें</li>
+        <li>दान: <b>${data.donate}</b></li>
+        <li>भाग्यशाली दिन <b>${data.day}</b> को विशेष पूजा करें</li>
+      </ul>
+    </div>
+    <p class="note">⚠️ यह भविष्यवाणी मनोरंजन एवं आध्यात्मिक मार्गदर्शन के उद्देश्य से है।</p>
+  `;
+  resultBox.style.display='block';
+  resultBox.scrollIntoView({behavior:'smooth'});
+});
+
+/* ================= चैट बॉट ================= */
+const chatLog=document.getElementById('chatLog');
+const chatForm=document.getElementById('chatForm');
+const chatInput=document.getElementById('chatInput');
+
+function addMsg(text,who){
+  const div=document.createElement('div');
+  div.className='msg '+who;
+  div.textContent=text;
+  chatLog.appendChild(div);
+  chatLog.scrollTop=chatLog.scrollHeight;
+  return div;
+}
+
+const botReplies={
+  greet:['नमस्ते! 🙏 मैं God Astrologer का आध्यात्मिक सहायक हूं। कोई भी सवाल पूछिए — प्रेम, करियर, धन, स्वास्थ्य या भविष्य।','नमस्कार! आपका स्वागत है। बताइए, आज किस विषय पर मार्गदर्शन चाहते हैं?','जय श्री गणेश! 🙏 कैसे मदद कर सकता हूं? अपना सवाल लिखिए।'],
+  bye:['अलविदा! 🙏 शुभ रहें। God Astrologer हमेशा आपके साथ है।','शुभ यात्रा! 🔮 कोई सवाल हो तो फिर आइए।'],
+  love:['प्रेम जीवन में शुक्र की चाल से मिठास आएगी। अपने साथी को समय दें और खुलकर बात करें। शुक्रवार को मां लक्ष्मी की पूजा करें — रिश्ते में सुधार होगा।','रिश्तों में गलतफहमी हो तो घबराएं नहीं। शुक्रवार को सफेद मिठाई का दान करें और "ॐ शुक्राय नमः" का जाप करें।','नए प्रेम संबंध की संभावना है। सामाजिक मेलजोल बढ़ाएं, लेकिन जल्दबाजी में कोई बड़ा फैसला न लें।'],
+  career:['करियर में बृहस्पति की कृपा है। मेहनत जारी रखें — गुरुवार को पीले वस्त्र धारण करें और "ॐ बृहस्पतये नमः" का जाप करें।','काम में रुकावट आ रही हो तो मंगलवार को हनुमान चालीसा का पाठ करें। साहस और आत्मविश्वास से सफलता मिलेगी।','नया अवसर जल्द मिलेगा। अपनी स्किल्स निखारें और शनिवार को शनि देव को तेल अर्पित करें।'],
+  money:['धन लाभ के योग हैं। शुक्रवार को मां लक्ष्मी की पूजा करें और दान करें — आर्थिक स्थिति सुधरेगी।','फिजूलखर्ची से बचें। रविवार को सूर्य को जल चढ़ाएं और "ॐ सूर्याय नमः" का जाप करें।','निवेश सोच-समझकर करें। गुरुवार को पीली वस्तु का दान धन वृद्धि में सहायक रहेगा।'],
+  health:['स्वास्थ्य में सुधार आएगा। प्रतिदिन सुबह 10 मिनट प्राणायाम करें और गर्म पानी पिएं।','मानसिक तनाव दूर करने के लिए रोज "ॐ" का जाप करें और मंगलवार को हनुमान जी की पूजा करें।','पेट की समस्या है तो हल्का भोजन करें। शनिवार को शनि देव को सरसों तेल का दीपक जलाएं।'],
+  study:['पढ़ाई में एकाग्रता बढ़ेगी। बुधवार को मां सरस्वती की पूजा करें और "ॐ ऐं सरस्वत्यै नमः" का जाप करें।','परीक्षा में सफलता के लिए गुरुवार को पीले वस्त्र पहनें और केले का दान करें।','रोज सुबह 15 मिनट ध्यान करें — याददाश्त मजबूत होगी और पढ़ाई में मन लगेगा।'],
+  family:['परिवार में शांति रहेगी। रविवार को सूर्य देव को जल चढ़ाएं — घर में सुख-समृद्धि बनी रहेगी।','परिवार के साथ समय बिताएं। शुक्रवार को घर में मां लक्ष्मी की पूजा करें।','घर में क्लेश है तो मंगलवार को हनुमान चालीसा का पाठ करें। शांति मिलेगी।'],
+  marriage:['विवाह में देरी हो रही है तो शुक्रवार को मां लक्ष्मी और गणेश जी की विधिवत पूजा करें।','विवाह के शुभ योग बन रहे हैं। गुरुवार को गाय को हरा चारा खिलाएं।','जीवनसाथी के साथ संबंध मधुर रहेंगे। शुक्रवार को सफेद मिठाई का दान करें।'],
+  remedy:['सबसे सरल उपाय — सुबह सूर्य को जल चढ़ाएं और "ॐ सूर्याय नमः" का 108 बार जाप करें।','शनि की साढ़ेसाती है तो शनिवार को शनि मंदिर में सरसों तेल का दीपक जलाएं।','रत्न धारण से पहले योग्य ज्योतिषी से पुष्टि कराएं। रुद्राक्ष धारण करना भी शुभ रहता है।'],
+  future:['आपका भविष्य उज्ज्वल है! आने वाले 3 महीनों में सकारात्मक बदलाव आएंगे। मेहनत और धैर्य बनाए रखें।','ग्रहों की चाल से जीवन में उन्नति के योग हैं। नियमित पूजा-पाठ और दान से शुभ फल मिलेंगे।','भविष्य में करियर और धन दोनों में प्रगति होगी। विश्वास रखें — समय आपके पक्ष में है।'],
+  problem:['हर समस्या का समाधान होता है। ऊपर कुंडली वाले फॉर्म में नाम और जन्म तिथि डालकर अपनी पूरी रिपोर्ट और उपाय पाएं।','परेशानी जो भी हो — मंगलवार को हनुमान चालीसा का पाठ करें और शनिवार को दान करें। शांति मिलेगी।','धैर्य रखें। रोज सुबह "ॐ नमः शिवाय" का जाप करें — समस्या का समाधान जल्द मिलेगा।'],
+  thanks:['आपका स्वागत है! 🙏 God Astrologer हमेशा आपके साथ है। कोई और सवाल हो तो पूछिए।','शुक्रिया! आपका दिन शुभ रहे। 🔮','कृपा बनी रहे! फिर कभी भी पूछिए। 🙏'],
+  fallback:['आपकी बात समझ गया। कृपया अपना सवाल साफ लिखें — जैसे प्रेम, करियर, धन, स्वास्थ्य या भविष्य के बारे में।','हम्म... मुझे आपका सवाल समझ नहीं आया। आप अपनी जन्म तिथि के साथ अपनी समस्या लिख सकते हैं, या नीचे दिए सुझावों में से चुनें।','मैं आपकी मदद के लिए यहां हूं। प्रेम, करियर, धन, स्वास्थ्य, विवाह — किसी भी विषय पर पूछें।']
+};
+
+const chatRules=[
+  {topic:'love',kw:['love','pyaar','prem','प्रेम','प्यार','boyfriend','girlfriend','crush','sathi','साथी','relation','रिलेशन','बॉयफ्रेंड','गर्लफ्रेंड']},
+  {topic:'marriage',kw:['shaadi','shadi','marriage','विवाह','शादी','vivah','ब्याह','kanyadaan','कन्यादान']},
+  {topic:'career',kw:['job','naukri','career','business','vyapar','करियर','नौकरी','व्यापार','work','काम','promotion','प्रमोशन','salary','सैलरी','धंधा']},
+  {topic:'money',kw:['money','paisa','dhan','paise','धन','पैसा','पैसे','rich','अमीर','income','आमदनी','loan','लोन','कर्ज','investment','निवेश']},
+  {topic:'health',kw:['health','sehat','बीमारी','bimari','स्वास्थ्य','सेहत','tandurusti','तंदुरुस्ती','stress','तनाव','tension','रोग','rog','बुखार']},
+  {topic:'study',kw:['padhai','पढ़ाई','exam','परीक्षा','study','school','स्कूल','college','कॉलेज','education','शिक्षा','saraswati','सरस्वती']},
+  {topic:'family',kw:['family','परिवार','parivaar','घर','ghar','maa','माँ','papa','पापा','parents','माता-पिता','bhai','भाई']},
+  {topic:'future',kw:['future','भविष्य','bhavishya','kundli','कुंडली','rashifal','राशिफल','zodiac','राशि','horoscope','ज्योतिष','bhavishy']},
+  {topic:'remedy',kw:['upay','उपाय','gemstone','रत्न','ratna','rudraksha','रुद्राक्ष','mantra','मंत्र','jaap','जाप','puja','पूजा','tilaak','तिलक']},
+  {topic:'problem',kw:['problem','दिक्कत','dikkat','मुसीबत','musibat','परेशानी','pareshani','सलाह','salah','help','मदद','solution','समाधान']}
+];
+
+function getBotReply(input){
+  const t=input.trim().toLowerCase();
+  const exact={'hi':'greet','hello':'greet','hii':'greet','hey':'greet','namaste':'greet','namaskar':'greet','नमस्ते':'greet','नमस्कार':'greet','good morning':'greet','gm':'greet','bye':'bye','thank you':'thanks','thanks':'thanks','शुक्रिया':'thanks','धन्यवाद':'thanks'};
+  if(exact[t]) return pickReply(exact[t]);
+  let best=null,bestScore=0;
+  for(const r of chatRules){
+    let score=0;
+    for(const kw of r.kw){ if(t.includes(kw)) score+=kw.length; }
+    if(score>bestScore){bestScore=score;best=r.topic;}
+  }
+  return pickReply(best||'fallback');
+}
+function pickReply(topic){
+  const arr=botReplies[topic]||botReplies.fallback;
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+chatForm.addEventListener('submit',function(e){
+  e.preventDefault();
+  const q=chatInput.value.trim();
+  if(!q) return;
+  addMsg(q,'user');
+  chatInput.value='';
+  const typing=addMsg('God Astrologer सोच रहा है...','bot typing');
+  setTimeout(function(){
+    typing.remove();
+    addMsg(getBotReply(q),'bot');
+  },900);
+});
+
+document.getElementById('clearChat').addEventListener('click',function(){
+  chatLog.innerHTML='<div class="msg bot">नमस्ते! 🙏 नई शुरुआत — कोई भी सवाल पूछिए।</div>';
+});
+
+/* चैट सुझाव (chips) */
+const chipQs=['मेरा भविष्य कैसा है?','करियर में सफलता के उपाय','प्रेम जीवन में मिठास कैसे लाएं?','धन लाभ कैसे होगा?','स्वास्थ्य में सुधार के उपाय','विवाह में देरी का समाधान'];
+const chipsBox=document.getElementById('chips');
+chipQs.forEach(function(q){
+  const b=document.createElement('button');
+  b.type='button'; b.className='chip'; b.textContent=q;
+  b.addEventListener('click',function(){
+    chatInput.value=q;
+    chatForm.requestSubmit();
+  });
+  chipsBox.appendChild(b);
+});
+
+/* ================= UPI डोनेशन ================= */
+const UPI_ID='yourname@upi'; /* ⚠️ यहां अपना असली UPI ID लगाएं, जैसे: yourname@okaxis */
+const UPI_NAME='God Astrologer';
+
+document.querySelectorAll('.amt-chip').forEach(function(ch){
+  ch.addEventListener('click',function(){
+    document.getElementById('donateAmount').value=this.dataset.amt;
+  });
+});
+document.getElementById('upiDisplay').textContent='UPI ID: '+UPI_ID;
+
+function getUpiLink(){
+  const amt=document.getElementById('donateAmount').value.trim();
+  const note=document.getElementById('donateNote').value.trim()||'Donation - God Astrologer';
+  if(!amt||isNaN(amt)||Number(amt)<=0){alert('कृपया दान की राशि भरें');return null;}
+  return 'upi://pay?pa='+encodeURIComponent(UPI_ID)+'&pn='+encodeURIComponent(UPI_NAME)+'&am='+amt+'&cu=INR&tn='+encodeURIComponent(note);
+}
+document.getElementById('donateBtn').addEventListener('click',function(){
+  const link=getUpiLink();
+  if(!link) return;
+  document.getElementById('qrBox').innerHTML='<img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data='+encodeURIComponent(link)+'" alt="UPI QR Code" />';
+  document.getElementById('qrBox').style.display='block';
+  window.location.href=link; // मोबाइल पर UPI ऐप खुलेगा
+});
+document.getElementById('copyBtn').addEventListener('click',async function(){
+  const link=getUpiLink();
+  if(!link) return;
+  try{
+    await navigator.clipboard.writeText(link);
+    alert('UPI लिंक कॉपी हो गया ✅ इसे किसी भी UPI ऐप में खोलें');
+  }catch(err){
+    alert('UPI लिंक: '+link);
+  }
+});
+</script>
+</body>
+</html>
